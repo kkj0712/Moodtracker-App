@@ -7,36 +7,26 @@
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
 	response.setDateHeader("Expires", 0);
-	
 	request.setCharacterEncoding("UTF-8");
 	
-	String id = request.getParameter("id") == null? "" : request.getParameter("id").trim();
-	String name = request.getParameter("name") == null? "" : request.getParameter("name").trim();
-	String phone = request.getParameter("phone") == null? "" : request.getParameter("phone").trim();
-	String grade = request.getParameter("grade") == null? "" : request.getParameter("grade").trim();
+	String imagename = request.getParameter("imagename") == null? "" : request.getParameter("imagename").trim();
+	String writedate = request.getParameter("writedate") == null? "" : request.getParameter("writedate").trim();
+	String writetime = request.getParameter("writetime") == null? "" : request.getParameter("writetime").trim();
+	String memo = request.getParameter("memo") == null? "" : request.getParameter("memo").trim();
 	
-	System.out.println("id: "+id);
-	System.out.println("name: "+name);
-	System.out.println("phone:"+phone);
-	System.out.println("grade:"+grade);
+	int num=Integer.parseInt(request.getParameter("num"))==0? 0 : Integer.parseInt(request.getParameter("num"));
+	
+	System.out.println(imagename+","+writedate+","+writetime+","+memo);
 	
 	QueryBean.getConnection();
-	//ArrayList resArr = new ArrayList();
 	int res = 0;
-	
 	try{
-		res=QueryBean.updateUserInfo(id, name, phone, grade);
-	}
-	catch(Exception e)
-	{
+		res=QueryBean.updateUserInfo(imagename, writedate, writetime, memo, num);
+	}catch(Exception e){
 		QueryBean.closeConnection();
 	}
-	out.print("[");
-	out.print("{");
+	out.print("[{");
 	out.print("\"RESULT_OK\":\""+res+"\" ");
-	out.print("}");
-	out.print("]");
-	
+	out.print("}]");
 	System.out.println("res: " +res);
-
 %>

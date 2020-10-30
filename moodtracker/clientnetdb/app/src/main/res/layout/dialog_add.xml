@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="57dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:text="ID :"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:hint="ID"
+             android:id="@+id/edtID"
+            android:paddingLeft="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="57dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:text="NAME : "/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:hint="NAME"
+            android:id="@+id/edtName"
+            android:paddingLeft="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="57dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:text="PHONE : "/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:hint="PHONE"
+            android:id="@+id/edtPhone"
+            android:paddingLeft="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="57dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:text="GRADE :"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:hint="GRADE"
+            android:id="@+id/edtGrade"
+            android:paddingLeft="5dp"/>
+    </LinearLayout>
+
+</LinearLayout>

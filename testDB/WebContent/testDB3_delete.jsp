@@ -7,35 +7,23 @@
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
 	response.setDateHeader("Expires", 0);
-	
 	request.setCharacterEncoding("UTF-8");
 	
-	String id = request.getParameter("id") == null? "" : request.getParameter("id").trim();
+	int num=Integer.parseInt(request.getParameter("num"))==0? 0 : Integer.parseInt(request.getParameter("num"));
 	
-	System.out.println("삭제할 ID: "+id);
+	System.out.println("삭제할 num: "+num);
 	QueryBean.getConnection();
 	
-	// ArrayList resArr = new ArrayList();
 	int res =0;
-	
-	try
-	{
-		res = QueryBean.deleteUserInfo(id);
-	}
-	catch(Exception e)
-	{
+	try{
+		res = QueryBean.deleteUserInfo(num);
+	}catch(Exception e){
 		out.print(e.toString());
-	}
-	finally
-	{
+	}finally{
 		QueryBean.closeConnection();
 	}
-	
-	out.print("[");
-	out.print("{");
+	out.print("[{");
 	out.print("\"RESULT_OK\":\""+res+"\" ");
-	out.print("}");
-	out.print("]");
-	
+	out.print("}]");
 	System.out.println("res: " +res);
 %>

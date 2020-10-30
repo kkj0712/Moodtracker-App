@@ -8,15 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class QueryBean {
-	Connection conn; //연결 객체
-	Statement st; //질의 객체
-	ResultSet rs; //결과 객체
+	Connection conn; 
+	Statement st; 
+	ResultSet rs; 
 	PreparedStatement ps;
 	
 	public QueryBean() {
-		conn=null; 
-		st=null;
-		rs=null;
+		conn=null; st=null; rs=null;
 	}
 	
 	public void getConnection() {
@@ -33,25 +31,18 @@ public class QueryBean {
 	}
 	
 	public void closeConnection() {
-		if(st!=null) {
-			try {
-				st.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		if(conn!=null) {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		try {
+			if(st!=null) st.close();
+			if(conn!=null) conn.close();
+			if(rs!=null) rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 	}
 	
-	//전체보기 및 검색
-	public ArrayList getUserInfo(String id) throws Exception{
-		String sql="select u_id, u_name, u_phone, u_grade, write_time from user_info_sample where u_id like '%"+id+"%'";
+	//전체보기
+	public ArrayList getUserInfo(String memo) throws Exception{
+		String sql="select imagename, writedate, writetime, memo, num from moodtracker where memo like '%"+memo+"%' order by writedate desc";
 		rs=st.executeQuery(sql);
 		ArrayList res=new ArrayList();
 		while(rs.next()) {
@@ -59,72 +50,57 @@ public class QueryBean {
 			res.add(rs.getString(2));
 			res.add(rs.getString(3));
 			res.add(rs.getString(4));
-			res.add(rs.getString(5));
+			res.add(rs.getInt(5));
 		}
 		return res;
 	}
 	
-	//추가
-	public int setUserInfo(String id, String name, String phone, String grade)
-	{
+	//추가하기
+	public int setUserInfo(String imagename, String writedate, String writetime, String memo){
 		int result =0;
 		ps = null;
-		String sql="insert into user_info_sample (u_id, u_name, u_phone, u_grade, write_time) values (?,?,?,?, sysdate)";
+		String sql="insert into moodtracker (imagename, writedate, writetime, memo, num) values (?,?,?,?,moodtracker_seq.nextval)";
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.clearParameters();
-			ps.setString(1, id);
-			ps.setString(2, name);
-			ps.setString(3, phone);
-			ps.setString(4, grade);
+			ps.setString(1, imagename);
+			ps.setString(2, writedate);
+			ps.setString(3, writetime);
+			ps.setString(4, memo);
 			result = ps.executeUpdate();
-		} catch (SQLException e) {
+		}catch (SQLException e) {
 			e.printStackTrace();
-		}
-		finally {
+		}finally {
 			try {
-				if(ps!= null) {
-					ps.close();
-				}
-			}
-			catch(Exception e) {
+				if(ps!= null) ps.close();
+			}catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return result;
 	}
 	
-	//수정
-	public int updateUserInfo(String id, String name, String phone, String grade) {
+	//수정하기
+	public int updateUserInfo(String imagename, String writedate, String writetime, String memo, int num) {
 		int result =0;
-		PreparedStatement pstmt = null;
+		PreparedStatement ps = null;
 		StringBuffer sb = new StringBuffer();
+		sb.append("update moodtracker set imagename=?, writedate=?, writetime=?, memo=? where num=?");
 		
-		sb.append(" UPDATE ");
-		sb.append("     USER_INFO_SAMPLE ");
-		sb.append(" SET ");
-		sb.append("     U_NAME=?, U_PHONE=?, U_GRADE=?, WRITE_TIME=sysdate ");
-		sb.append(" WHERE ");
-		sb.append("     U_ID=? ");
-		System.out.println(sb.toString());
-		
-		try
-		{
-			pstmt = conn.prepareStatement(sb.toString());
-			pstmt.clearParameters();
-			pstmt.setString(1, name);
-			pstmt.setString(2, phone);
-			pstmt.setString(3, grade);
-			pstmt.setString(4, id);
-			result = pstmt.executeUpdate();
-		}
-		catch (Exception e){
+		try{
+			ps = conn.prepareStatement(sb.toString());
+			ps.clearParameters();
+			ps.setString(1, imagename);
+			ps.setString(2, writedate);
+			ps.setString(3, writetime);
+			ps.setString(4, memo);
+			ps.setInt(5, num);
+			result = ps.executeUpdate();
+		}catch (Exception e){
 			e.printStackTrace();
 		}finally {
 			try {
-				if(pstmt != null){
-					pstmt.close();
-				}
+				if(ps != null) ps.close();
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -132,45 +108,27 @@ public class QueryBean {
 		return result;
 	}
 	
-	//삭제
-	public int deleteUserInfo(String id) throws Exception
-	{
+	//삭제하기
+	public int deleteUserInfo(int num) throws Exception{
 		int result = 0;
-		PreparedStatement pstmt = null;
+		PreparedStatement ps = null;
 		StringBuffer sb = new StringBuffer();
+		sb.append("delete from moodtracker where num=?");
 		
-		sb.append(" DELETE ");
-		sb.append("     FROM ");
-		sb.append("        USER_INFO_SAMPLE ");
-		sb.append("     WHERE ");
-		sb.append("        U_ID = ? ");
-		
-		try
-		{
-			pstmt = conn.prepareStatement(sb.toString());
-			pstmt.clearParameters();
-			pstmt.setString(1, id);
-			
-			result = pstmt.executeUpdate();
-		}
-		catch (Exception e)
-		{
+		try{
+			ps = conn.prepareStatement(sb.toString());
+			ps.clearParameters();
+			ps.setInt(1, num);
+			result = ps.executeUpdate();
+		}catch (Exception e){
 			e.printStackTrace();
-		}
-		finally
-		{
-			try 
-			{
-				if(pstmt != null)
-				{
-					pstmt.close();
-				}
-			}
-			catch (Exception e) {
+		}finally{
+			try{
+				if(ps != null) ps.close();
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return result;
-		
 	}
 }
